@@ -22,7 +22,7 @@ class SMSGateway
      */
     protected function getHeaders()
     {
-        $app_hash = base64_encode("{$this->config['username']}:{$this->config['password']}");
+        $app_hash = base64_encode("{$this->config['api_key']}:{$this->config['api_secret']}");
         return [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',

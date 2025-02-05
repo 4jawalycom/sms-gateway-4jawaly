@@ -21,9 +21,9 @@ php artisan vendor:publish --provider="Jawalycom\SMSGateway4Jawaly\SMSGatewaySer
 Add these variables to your .env file:
 
 ```
-JAWALY_SMS_API_KEY=your_api_key
-JAWALY_SMS_API_SECRET=your_api_secret
-JAWALY_SMS_SENDER=your_sender_name
+JAWALY_SMS_GATEWAY_API_KEY=your_api_key
+JAWALY_SMS_GATEWAY_API_SECRET=your_api_secret
+JAWALY_SMS_GATEWAY_SENDER=your_sender_name
 ```
 
 ## Usage
