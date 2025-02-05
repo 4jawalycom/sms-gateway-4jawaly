@@ -14,13 +14,13 @@ class SMSGatewayServiceProvider extends ServiceProvider
             __DIR__.'/../config/jawaly-sms.php', 'jawaly-sms'
         );
 
-        // Register the main class to use with the facade
-        $this->app->bind('sms-gateway', function ($app) {
-            return new SMSGateway(config('jawaly-sms'));
+        // Register the main class as a singleton
+        $this->app->singleton(SMSGatewayFacade::class, function ($app) {
+            return new SMSGatewayFacade(config('jawaly-sms'));
         });
 
-        // Register the facade
-        $this->app->alias('sms-gateway', SMSGateway::class);
+        // Register the facade alias
+        $this->app->alias(SMSGatewayFacade::class, 'SMSGateway');
     }
 
     public function boot()

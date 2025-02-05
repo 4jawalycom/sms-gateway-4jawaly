@@ -10,21 +10,33 @@ A Laravel package for sending SMS messages through Jawaly SMS Gateway (4jawaly.c
 
 ## Installation
 
-You can install the package via composer:
+1. Install the package via composer:
 
 ```bash
 composer require 4jawalycom/sms-gateway-4jawaly
 ```
 
-## Configuration
+2. Add the service provider to your `config/app.php`:
 
-Publish the configuration file:
+```php
+'providers' => [
+    // ...
+    Jawalycom\SMSGateway4Jawaly\SMSGatewayServiceProvider::class,
+],
+
+'aliases' => [
+    // ...
+    'SMSGateway' => Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway::class,
+],
+```
+
+3. Publish the configuration file:
 
 ```bash
 php artisan vendor:publish --provider="Jawalycom\SMSGateway4Jawaly\SMSGatewayServiceProvider"
 ```
 
-Add these variables to your .env file:
+4. Add these variables to your .env file:
 
 ```
 JAWALY_SMS_API_KEY=your_api_key
@@ -33,8 +45,6 @@ JAWALY_SMS_SENDER=your_sender_name
 ```
 
 ## Usage
-
-You can use the package in two ways:
 
 ### Method 1: Using the Facade
 

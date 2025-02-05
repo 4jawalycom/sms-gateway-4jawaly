@@ -20,6 +20,6 @@ class SMSGateway extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'sms-gateway';
+        return \Jawalycom\SMSGateway4Jawaly\SMSGateway::class;
     }
 }
