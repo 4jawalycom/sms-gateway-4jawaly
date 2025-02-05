@@ -3,10 +3,14 @@
 namespace Jawalycom\SMSGateway4Jawaly;
 
 use Illuminate\Support\ServiceProvider;
-use Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway as SMSGatewayFacade;
 
 class SMSGatewayServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
     public function register()
     {
         // Register the config file
@@ -14,15 +18,17 @@ class SMSGatewayServiceProvider extends ServiceProvider
             __DIR__.'/../config/jawaly-sms.php', 'jawaly-sms'
         );
 
-        // Register the main class as a singleton
-        $this->app->singleton(SMSGatewayFacade::class, function ($app) {
-            return new SMSGatewayFacade(config('jawaly-sms'));
+        // Register the main class
+        $this->app->bind('jawaly-sms', function ($app) {
+            return new SMSGateway($app['config']['jawaly-sms']);
         });
-
-        // Register the facade alias
-        $this->app->alias(SMSGatewayFacade::class, 'SMSGateway');
     }
 
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
     public function boot()
     {
         // Publish the config file
