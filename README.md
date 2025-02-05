@@ -2,6 +2,12 @@
 
 A Laravel package for sending SMS messages through Jawaly SMS Gateway (4jawaly.com).
 
+## Requirements
+
+- PHP ^7.4|^8.0|^8.1|^8.2|^8.3
+- Laravel 7.x|8.x|9.x|10.x
+- Guzzle HTTP ^7.0
+
 ## Installation
 
 You can install the package via composer:
@@ -21,9 +27,9 @@ php artisan vendor:publish --provider="Jawalycom\SMSGateway4Jawaly\SMSGatewaySer
 Add these variables to your .env file:
 
 ```
-JAWALY_SMS_GATEWAY_API_KEY=your_api_key
-JAWALY_SMS_GATEWAY_API_SECRET=your_api_secret
-JAWALY_SMS_GATEWAY_SENDER=your_sender_name
+JAWALY_SMS_API_KEY=your_api_key
+JAWALY_SMS_API_SECRET=your_api_secret
+JAWALY_SMS_SENDER=your_sender_name
 ```
 
 ## Usage
@@ -164,6 +170,8 @@ try {
 - Pagination support for balance and sender names
 - Exception handling with meaningful error messages
 - Laravel integration
+- Support for PHP 7.4 to 8.3
+- Support for Laravel 7.x to 10.x
 
 ## Support
 
