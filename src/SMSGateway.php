@@ -9,7 +9,7 @@ class SMSGateway
 {
     protected $config;
     protected $client;
-    protected $baseUrl = 'http://www.4jawaly.net/api';
+    protected $baseUrl = 'https://api-sms.4jawaly.com/api/v1';
 
     public function __construct(array $config)
     {
@@ -17,37 +17,84 @@ class SMSGateway
         $this->client = new Client();
     }
 
-    public function send($to, $message, $sender = null)
+    /**
+     * Get the authentication headers
+     */
+    protected function getHeaders()
+    {
+        $app_hash = base64_encode("{$this->config['username']}:{$this->config['password']}");
+        return [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => "Basic {$app_hash}"
+        ];
+    }
+
+    /**
+     * Send SMS message
+     */
+    public function send($numbers, $message, $sender = null)
     {
         try {
             $sender = $sender ?? $this->config['default_sender'];
-            $response = $this->client->post($this->baseUrl . '/sendsms.php', [
-                'form_params' => [
-                    'username' => $this->config['username'],
-                    'password' => $this->config['password'],
-                    'sender'   => $sender,
-                    'numbers'  => $this->formatNumbers($to),
-                    'message'  => $message,
-                    'unicode'  => 'e',
-                    'return'   => 'json'
+            
+            $payload = [
+                'messages' => [
+                    [
+                        'text' => $message,
+                        'numbers' => is_array($numbers) ? $numbers : [$numbers],
+                        'sender' => $sender
+                    ]
                 ]
+            ];
+
+            $response = $this->client->post($this->baseUrl . '/account/area/sms/send', [
+                'headers' => $this->getHeaders(),
+                'json' => $payload
             ]);
 
-            return json_decode($response->getBody(), true);
+            $status_code = $response->getStatusCode();
+            $response_data = json_decode($response->getBody(), true);
+
+            if ($status_code == 200) {
+                if (isset($response_data['messages'][0]['err_text'])) {
+                    throw new Exception($response_data['messages'][0]['err_text']);
+                }
+                return [
+                    'success' => true,
+                    'job_id' => $response_data['job_id'],
+                    'data' => $response_data
+                ];
+            } elseif ($status_code == 400) {
+                throw new Exception($response_data['message']);
+            } elseif ($status_code == 422) {
+                throw new Exception('نص الرسالة فارغ');
+            } else {
+                throw new Exception("خطأ في الاتصال. Status code: {$status_code}");
+            }
         } catch (Exception $e) {
             throw new Exception('Failed to send SMS: ' . $e->getMessage());
         }
     }
 
-    public function getBalance()
+    /**
+     * Get account balance and packages
+     */
+    public function getBalance($options = [])
     {
         try {
-            $response = $this->client->get($this->baseUrl . '/getbalance.php', [
-                'query' => [
-                    'username' => $this->config['username'],
-                    'password' => $this->config['password'],
-                    'return'   => 'json'
-                ]
+            $query = array_merge([
+                'is_active' => 1,
+                'order_by' => 'id',
+                'order_by_type' => 'desc',
+                'page' => 1,
+                'page_size' => 10,
+                'return_collection' => 1
+            ], $options);
+
+            $response = $this->client->get($this->baseUrl . '/account/area/me/packages', [
+                'headers' => $this->getHeaders(),
+                'query' => $query
             ]);
 
             return json_decode($response->getBody(), true);
@@ -56,37 +103,27 @@ class SMSGateway
         }
     }
 
-    public function getSenderNames()
+    /**
+     * Get sender names
+     */
+    public function getSenderNames($options = [])
     {
         try {
-            $response = $this->client->get($this->baseUrl . '/sender/get.php', [
-                'query' => [
-                    'username' => $this->config['username'],
-                    'password' => $this->config['password'],
-                    'return'   => 'json'
-                ]
+            $query = array_merge([
+                'page_size' => 10,
+                'page' => 1,
+                'status' => 1,
+                'return_collection' => 1
+            ], $options);
+
+            $response = $this->client->get($this->baseUrl . '/account/area/senders', [
+                'headers' => $this->getHeaders(),
+                'query' => $query
             ]);
 
             return json_decode($response->getBody(), true);
         } catch (Exception $e) {
             throw new Exception('Failed to get sender names: ' . $e->getMessage());
         }
-    }
-
-    protected function formatNumbers($numbers)
-    {
-        if (is_array($numbers)) {
-            return implode(',', array_map([$this, 'formatSingleNumber'], $numbers));
-        }
-        return $this->formatSingleNumber($numbers);
-    }
-
-    protected function formatSingleNumber($number)
-    {
-        $number = preg_replace('/[^0-9]/', '', $number);
-        if (substr($number, 0, 2) !== '966') {
-            $number = '966' . ltrim($number, '0');
-        }
-        return $number;
     }
 }

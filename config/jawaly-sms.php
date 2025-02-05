@@ -7,15 +7,12 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    // Your Jawaly SMS account username
-    'username' => env('JAWALY_SMS_USERNAME', ''),
+    // Your Jawaly SMS API Key (Username)
+    'username' => env('JAWALY_SMS_API_KEY', ''),
 
-    // Your Jawaly SMS account password
-    'password' => env('JAWALY_SMS_PASSWORD', ''),
+    // Your Jawaly SMS API Secret (Password)
+    'password' => env('JAWALY_SMS_API_SECRET', ''),
 
     // Default sender name (should be pre-approved by Jawaly)
-    'default_sender' => env('JAWALY_SMS_SENDER', ''),
-
-    // Enable debug mode for testing (optional)
-    'debug' => env('JAWALY_SMS_DEBUG', false),
+    'default_sender' => env('JAWALY_SMS_SENDER', '4jawaly'),
 ];
