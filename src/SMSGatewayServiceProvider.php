@@ -1,6 +1,6 @@
 <?php
 
-namespace Samehsoliman\SMSGateway4Jawaly;
+namespace Jawalycom\SMSGateway4Jawaly;
 
 use Illuminate\Support\ServiceProvider;
 

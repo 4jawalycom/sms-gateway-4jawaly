@@ -1,17 +1,17 @@
 {
-    "name": "samehsoliman/sms-gateway-4jawaly",
+    "name": "4jawalycom/sms-gateway-4jawaly",
     "description": "A Laravel SMS Gateway Package for Jawaly SMS Services",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Samehsoliman\\SMSGateway4Jawaly\\": "src/"
+            "Jawalycom\\SMSGateway4Jawaly\\": "src/"
         }
     },
     "authors": [
         {
-            "name": "Sameh Soliman",
-            "email": "your.email@example.com"
+            "name": "4jawaly",
+            "email": "info@4jawaly.com"
         }
     ],
     "minimum-stability": "dev",
@@ -23,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Samehsoliman\\SMSGateway4Jawaly\\SMSGatewayServiceProvider"
+                "Jawalycom\\SMSGateway4Jawaly\\SMSGatewayServiceProvider"
             ]
         }
     }

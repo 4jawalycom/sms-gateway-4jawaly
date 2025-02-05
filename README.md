@@ -7,7 +7,7 @@ A Laravel package for sending SMS messages through Jawaly SMS Gateway (4jawaly.n
 You can install the package via composer:
 
 ```bash
-composer require samehsoliman/sms-gateway-4jawaly
+composer require 4jawalycom/sms-gateway-4jawaly
 ```
 
 ## Configuration
@@ -15,7 +15,7 @@ composer require samehsoliman/sms-gateway-4jawaly
 Publish the configuration file:
 
 ```bash
-php artisan vendor:publish --provider="Samehsoliman\SMSGateway4Jawaly\SMSGatewayServiceProvider"
+php artisan vendor:publish --provider="Jawalycom\SMSGateway4Jawaly\SMSGatewayServiceProvider"
 ```
 
 Add these variables to your .env file:
@@ -29,7 +29,7 @@ JAWALY_SMS_SENDER=your_sender_name
 ## Usage
 
 ```php
-use Samehsoliman\SMSGateway4Jawaly\Facades\SMSGateway;
+use Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway;
 
 // Send SMS to a single number
 SMSGateway::send('966500000000', 'Your message here');
@@ -58,7 +58,7 @@ $senders = SMSGateway::getSenderNames();
 
 ## Support
 
-For support, please contact samehsoliman@example.com
+For support, please contact info@4jawaly.com
 
 ## License
 
