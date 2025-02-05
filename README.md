@@ -1,6 +1,6 @@
-# Jawaly SMS Gateway Package for Laravel
+# 4Jawaly SMS Gateway Package for Laravel
 
-A Laravel package for sending SMS messages through Jawaly SMS Gateway (4jawaly.com).
+A Laravel package for sending SMS messages through 4Jawaly SMS Gateway (4jawaly.com).
 
 ## Requirements
 
