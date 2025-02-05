@@ -34,7 +34,9 @@ JAWALY_SMS_SENDER=your_sender_name
 
 ## Usage
 
-### Sending SMS
+You can use the package in two ways:
+
+### Method 1: Using the Facade
 
 ```php
 use Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway;
@@ -49,11 +51,33 @@ SMSGateway::send(['966500000000', '966500000001'], 'Your message here');
 SMSGateway::send('966500000000', 'Your message here', 'CUSTOM_SENDER');
 ```
 
+### Method 2: Using Direct Instantiation
+
+```php
+use Jawalycom\SMSGateway4Jawaly\SMSGateway;
+
+// Create a new instance
+$sms = new SMSGateway(config('jawaly-sms'));
+
+// Send SMS
+$result = $sms->send('966500000000', 'Your message here');
+
+// Send to multiple numbers
+$result = $sms->send(['966500000000', '966500000001'], 'Your message here');
+
+// Send with custom sender
+$result = $sms->send('966500000000', 'Your message here', 'CUSTOM_SENDER');
+```
+
 ### Getting Account Balance
 
 ```php
-// Get balance with default options
+// Using Facade
 $balance = SMSGateway::getBalance();
+
+// Using Direct Instantiation
+$sms = new SMSGateway(config('jawaly-sms'));
+$balance = $sms->getBalance();
 
 // Get balance with custom options
 $balance = SMSGateway::getBalance([
@@ -69,8 +93,12 @@ $balance = SMSGateway::getBalance([
 ### Getting Sender Names
 
 ```php
-// Get sender names with default options
+// Using Facade
 $senders = SMSGateway::getSenderNames();
+
+// Using Direct Instantiation
+$sms = new SMSGateway(config('jawaly-sms'));
+$senders = $sms->getSenderNames();
 
 // Get sender names with custom options
 $senders = SMSGateway::getSenderNames([
@@ -169,7 +197,7 @@ try {
 - Retrieve approved sender names with filtering options
 - Pagination support for balance and sender names
 - Exception handling with meaningful error messages
-- Laravel integration
+- Laravel integration with Facade support
 - Support for PHP 7.4 to 8.3
 - Support for Laravel 7.x to 10.x
 
