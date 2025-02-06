@@ -51,14 +51,21 @@ JAWALY_SMS_SENDER=your_sender_name
 ```php
 use Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway;
 
+// Important: All three parameters (number, message, sender) are required
+// رقم الجوال ونص الرسالة واسم المرسل كلها متطلبات إلزامية
+
 // Send SMS to a single number
-$result = SMSGateway::send('966500000000', 'Your message here');
+$result = SMSGateway::send('966500000000', 'Your message here', 'SENDER_NAME');
 
 // Send SMS to multiple numbers
-$result = SMSGateway::send(['966500000000', '966500000001'], 'Your message here');
+$result = SMSGateway::send(
+    ['966500000000', '966500000001'],
+    'Your message here',
+    'SENDER_NAME'
+);
 
-// Send with custom sender name
-$result = SMSGateway::send('966500000000', 'Your message here', 'CUSTOM_SENDER');
+// Note: The sender name must be pre-approved by 4jawaly.com
+// ملاحظة: يجب أن يكون اسم المرسل معتمداً مسبقاً من 4jawaly.com
 
 // Check the result
 if (!empty($result['success'])) {
@@ -86,7 +93,7 @@ $config = [
     'api_key' => env('JAWALY_SMS_API_KEY'),
     'api_secret' => env('JAWALY_SMS_API_SECRET'),
     'base_url' => 'https://api-sms.4jawaly.com/api/v1/',
-    'default_sender' => env('JAWALY_SMS_SENDER', '4jawaly'),
+    'default_sender' => env('JAWALY_SMS_SENDER'), // Must be pre-approved by 4jawaly.com
     'timeout' => 30,
     'verify_ssl' => true
 ];
@@ -94,8 +101,8 @@ $config = [
 // Create a new instance
 $gateway = new SMSGateway($config);
 
-// Send SMS
-$result = $gateway->send('966500000000', 'Your message here');
+// Send SMS (all parameters are required)
+$result = $gateway->send('966500000000', 'Your message here', 'SENDER_NAME');
 
 // Check the result
 if (!empty($result['success'])) {
@@ -224,7 +231,7 @@ The package throws exceptions for various error cases:
 Example error handling:
 ```php
 try {
-    $result = SMSGateway::send('966500000000', 'Your message');
+    $result = SMSGateway::send('966500000000', 'Your message', 'SENDER_NAME');
     // Message sent successfully
     echo "Message sent! Job ID: " . $result['job_id'];
 } catch (\Exception $e) {
