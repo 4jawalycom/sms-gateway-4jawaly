@@ -52,13 +52,28 @@ JAWALY_SMS_SENDER=your_sender_name
 use Jawalycom\SMSGateway4Jawaly\Facades\SMSGateway;
 
 // Send SMS to a single number
-SMSGateway::send('966500000000', 'Your message here');
+$result = SMSGateway::send('966500000000', 'Your message here');
 
 // Send SMS to multiple numbers
-SMSGateway::send(['966500000000', '966500000001'], 'Your message here');
+$result = SMSGateway::send(['966500000000', '966500000001'], 'Your message here');
 
 // Send with custom sender name
-SMSGateway::send('966500000000', 'Your message here', 'CUSTOM_SENDER');
+$result = SMSGateway::send('966500000000', 'Your message here', 'CUSTOM_SENDER');
+
+// Check the result
+if (!empty($result['success'])) {
+    echo "Message sent successfully!";
+    if (!empty($result['job_ids'])) {
+        echo "Job IDs: " . implode(', ', $result['job_ids']);
+    }
+} else {
+    echo "Failed to send message.";
+    if (!empty($result['errors'])) {
+        foreach ($result['errors'] as $error => $numbers) {
+            echo "Error: $error - Numbers: " . implode(', ', $numbers);
+        }
+    }
+}
 ```
 
 ### Method 2: Using Direct Instantiation
@@ -66,17 +81,36 @@ SMSGateway::send('966500000000', 'Your message here', 'CUSTOM_SENDER');
 ```php
 use Jawalycom\SMSGateway4Jawaly\SMSGateway;
 
+// Setup configuration array
+$config = [
+    'api_key' => env('JAWALY_SMS_API_KEY'),
+    'api_secret' => env('JAWALY_SMS_API_SECRET'),
+    'base_url' => 'https://api-sms.4jawaly.com/api/v1/',
+    'default_sender' => env('JAWALY_SMS_SENDER', '4jawaly'),
+    'timeout' => 30,
+    'verify_ssl' => true
+];
+
 // Create a new instance
-$sms = new SMSGateway(config('jawaly-sms'));
+$gateway = new SMSGateway($config);
 
 // Send SMS
-$result = $sms->send('966500000000', 'Your message here');
+$result = $gateway->send('966500000000', 'Your message here');
 
-// Send to multiple numbers
-$result = $sms->send(['966500000000', '966500000001'], 'Your message here');
-
-// Send with custom sender
-$result = $sms->send('966500000000', 'Your message here', 'CUSTOM_SENDER');
+// Check the result
+if (!empty($result['success'])) {
+    echo "Message sent successfully!";
+    if (!empty($result['job_ids'])) {
+        echo "Job IDs: " . implode(', ', $result['job_ids']);
+    }
+} else {
+    echo "Failed to send message.";
+    if (!empty($result['errors'])) {
+        foreach ($result['errors'] as $error => $numbers) {
+            echo "Error: $error - Numbers: " . implode(', ', $numbers);
+        }
+    }
+}
 ```
 
 ### Getting Account Balance
